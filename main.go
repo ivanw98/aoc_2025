@@ -59,16 +59,19 @@ func parseInstructions(filename string) []Instruction {
 	return instructions
 }
 
+// Dial represents a rotating dial object.
 type Dial struct {
 	value         int // current position (0-99)
 	zeroCrossings int
 }
 
+// Instruction represents how to move the dial.
 type Instruction struct {
 	direction string
 	steps     int
 }
 
+// NewDial instantiates a dial.
 func NewDial(start int) *Dial {
 	return &Dial{value: ((start % 100) + 100) % 100}
 }
@@ -93,10 +96,12 @@ func (d *Dial) Right(steps int) {
 	}
 }
 
+// Value returns the value of the dial.
 func (d *Dial) Value() int {
 	return d.value
 }
 
+// ZeroCrossings returns the number of times the dial has landed on, or crossed 0.
 func (d *Dial) ZeroCrossings() int {
 	return d.zeroCrossings
 }
