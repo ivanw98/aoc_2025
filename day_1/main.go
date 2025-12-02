@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	instructions := parseInstructions("input.txt")
+	instructions := parseInstructions("day_1/input.txt")
 
 	dial := NewDial(50)
 	for _, instr := range instructions {
