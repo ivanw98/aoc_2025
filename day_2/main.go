@@ -58,17 +58,29 @@ func checkRange(start, end int) []int {
 }
 
 func isInvalid(id int) bool {
+	// for each possible pattern length in the string representation of the int
+	// check if the first part of the number looks like the second
 	idStr := strconv.Itoa(id)
 	length := len(idStr)
 
-	// odd length strings cannot be invalid
-	if length%2 != 0 {
-		return false
+	for patternLength := 1; patternLength <= length/2; patternLength++ {
+		// must divide evenly
+		if length%patternLength != 0 {
+			continue
+		}
+
+		isPattern := true
+		for i := patternLength; i < length; i++ {
+			if idStr[i] != idStr[i%patternLength] {
+				isPattern = false
+				break
+			}
+		}
+
+		if isPattern {
+			return true
+		}
 	}
 
-	midPoint := length / 2
-	firstHalf := idStr[:midPoint]
-	secondHalf := idStr[midPoint:]
-
-	return firstHalf == secondHalf
+	return false
 }
