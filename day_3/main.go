@@ -13,7 +13,7 @@ func main() {
 	instructions := parseInstructions("day_3/input.txt")
 	var biggestNumberCollection []int
 	for _, line := range instructions {
-		biggestNumberInLine := largestTwoDigit(line)
+		biggestNumberInLine := largestKDigits(line, 12)
 		biggestNumberCollection = append(biggestNumberCollection, biggestNumberInLine)
 	}
 	result := sumArray(biggestNumberCollection)
@@ -26,6 +26,51 @@ func sumArray(numbers []int) int {
 		result += numbers[i]
 	}
 	return result
+}
+
+func largestKDigits(s string, k int) int {
+	n := len(s)
+	if n < k {
+		return 0
+	}
+
+	var result []int
+
+	// For each position in the result
+	for i := 0; i < k; i++ {
+		// Determine search range
+		start := 0
+		if len(result) > 0 {
+			start = result[len(result)-1] + 1 // Start after last picked position
+		}
+
+		// We need k - i digits total (including this one)
+		// Must leave at least k - i - 1 digits after this position
+		end := n - k + i
+
+		// Find the maximum digit in the valid range
+		maxDigit := byte('0') - 1
+		maxPos := -1
+
+		for j := start; j <= end; j++ {
+			if s[j] > maxDigit {
+				maxDigit = s[j]
+				maxPos = j
+			}
+		}
+
+		result = append(result, maxPos)
+	}
+
+	// Build the result string from selected positions
+	resultStr := ""
+	for _, pos := range result {
+		resultStr += string(s[pos])
+	}
+
+	largest, _ := strconv.Atoi(resultStr)
+
+	return largest
 }
 
 func largestTwoDigit(s string) int {
